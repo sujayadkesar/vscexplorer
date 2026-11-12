@@ -24,6 +24,17 @@ Added a Windows CI workflow, a separate v2 GUI requirements file and preview
 setup instructions. Native-library and real-image limitations below still apply.
 The historical audit sections below describe earlier verification rounds.
 
+### Upstream submission review
+
+A second review reproduced missing explicit handle cleanup when seeking or
+reading the size fails during raw/split-raw initialization. Raw initialization
+now closes its handle on failure, and split-raw registers each handle for cleanup
+before probing its size. The regression test failed in all four backend/operation
+combinations before the fix. Afterward, **57/57 regression tests, 18/18 self-tests,
+compilation and Ruff undefined-name/syntax checks passed**. The prior preview
+commit also passed both GitHub Actions runs. Native-image validation remains
+outstanding as described above.
+
 Audited and updated `vscexplorer_v2.py`. Validation used Windows, Python 3.12.10,
 PySide6/Qt6, temporary synthetic raw images, the built-in demo case, and mocks
 for native-library failure paths. No user evidence or physical drives were opened.

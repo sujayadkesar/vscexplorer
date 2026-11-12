@@ -246,6 +246,18 @@ class AuditTests(unittest.TestCase):
             self.assertEqual(device.read(4500, 108), b"x" * 108)
         read.assert_called_once_with(123, 512)
 
+    def test_raw_backends_close_handles_when_size_probe_fails(self):
+        for backend, argument in ((v.RawFileBackend, "image.raw"),
+                                  (v.SplitRawBackend, ["image.001"])):
+            for operation in ("seek", "tell"):
+                with self.subTest(backend=backend.__name__, operation=operation):
+                    handle = Mock()
+                    getattr(handle, operation).side_effect = OSError("size probe failed")
+                    with patch("builtins.open", return_value=handle):
+                        with self.assertRaises(OSError):
+                            backend(argument)
+                    handle.close.assert_called_once()
+
     def test_device_alignment_fallback_stays_within_media(self):
         device = object.__new__(v.PhysicalDeviceBackend)
         device._fd, device.media_size = 123, 4608

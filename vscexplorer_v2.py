@@ -2135,9 +2135,13 @@ class RawFileBackend(_MediaBackend):
     def __init__(self, path: str):
         super().__init__()
         self._fp = open(path, "rb")
-        self._fp.seek(0, os.SEEK_END)
-        self.media_size = self._fp.tell()
-        self._fp.seek(0)
+        try:
+            self._fp.seek(0, os.SEEK_END)
+            self.media_size = self._fp.tell()
+            self._fp.seek(0)
+        except Exception:
+            self._fp.close()
+            raise
         self.segment_paths = [path]
 
     def read(self, offset, size):
@@ -2159,9 +2163,9 @@ class SplitRawBackend(_MediaBackend):
         try:
             for seg in segments:
                 fp = open(seg, "rb")
+                self._fps.append(fp)
                 fp.seek(0, os.SEEK_END)
                 size = fp.tell()
-                self._fps.append(fp)
                 self._starts.append(pos)
                 pos += size
         except Exception:
