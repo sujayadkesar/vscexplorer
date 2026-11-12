@@ -90,6 +90,38 @@ pip install -r requirements.txt
 python vscexplorer.py
 ```
 
+## V2 preview
+
+The v2 application is `vscexplorer_v2.py`; the original entry point remains
+`vscexplorer.py`. To launch v2 and use its built-in demo case:
+
+```bash
+python -m pip install -r requirements-v2.txt
+python vscexplorer_v2.py
+```
+
+V2 adds persistent snapshot indexing, ADS browsing/export, hex search, version
+history, bookmarks and HTML/PDF case reports. Python 3.12 with PySide6 is tested
+for the demo and regression suite. PyQt5 is also supported by the application
+but was not validated in this audit.
+
+Real filesystem browsing additionally requires `pytsk3`. Optional native
+backends are `pyewf` (E01), `pyvshadow` (VSS), `pybde` (BitLocker), `pyvhdi`
+(VHD/VHDX), and `pyvmdk` (VMDK). These import names are supplied by their
+respective libyal Python bindings; they are not installed by
+`requirements-v2.txt`. Windows creation-time preservation uses `pywin32`.
+Use **Help > Forensic Dependency Status** to inspect availability.
+
+This is a preview for review and testing, pending known-answer real-image
+validation. Native container, VSS, BitLocker and physical-drive integration
+have not been verified by the synthetic tests. See [the audit](AUDIT_V2.md)
+for coverage and remaining validation.
+
+```bash
+python -m unittest -v test_vscexplorer_v2
+python vscexplorer_v2.py --self-test
+```
+
 ## Acknowledgments & Credits
 - [Joachim Metz](https://www.linkedin.com/in/jbmetz/)
 For essential forensic libraries such as **libewf** and **libbde**.<br>
