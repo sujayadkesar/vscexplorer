@@ -1,5 +1,5 @@
-pytsk3==20250729 
-libewf-python==20240506 
+PySide6>=6.6,<7
+pytsk3==20250729
+libewf-python==20240506
 libbde-python==20240502
-PyQt5
-dfvfs
+libvshadow-python

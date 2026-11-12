@@ -1,2 +1,0 @@
-# GUI/demo and automated tests. Native image backends are listed in README.md.
-PySide6>=6.6,<7

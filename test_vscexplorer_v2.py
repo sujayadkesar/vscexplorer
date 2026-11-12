@@ -10,7 +10,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-import vscexplorer_v2 as v
+import vscexplorer as v
 
 
 class AuditTests(unittest.TestCase):

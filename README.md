@@ -15,7 +15,7 @@
 ![image](https://github.com/user-attachments/assets/4526c086-55f1-4ebf-9657-2aea4523158e)
 ## 🧠 What is VSCExplorer?
 
-**VSCExplorer** is a professional-grade forensic analysis tool that automates the discovery and exploration of **Volume Shadow Copies (VSCs)** from `.E01` or `dd` disk images. Built with forensic professionals and cybercrime investigators in mind, this tool provides a clean and intuitive PyQt-based GUI to:
+**VSCExplorer** is a professional-grade forensic analysis tool that automates the discovery and exploration of **Volume Shadow Copies (VSCs)** from `.E01` or `dd` disk images. Built with forensic professionals and cybercrime investigators in mind, this tool provides a clean and intuitive Qt-based GUI to:
 
 - 🔍 Detect all available Volume Shadow Snapshots within an image
 - 📂 Mount and browse each VSC independently
@@ -55,71 +55,49 @@
   - Batch export capabilities
 
 
-## 📋 Prerequisites
+## Installation and upgrade to v2
 
-#### For Windows:
-*There's a compatibility issue with Python 3.12. Please install Python 3.11 from the official Python website: https://www.python.org/downloads/release/python-3110/
-<br>
-
-If you don't have Microsoft C++ Build Tools installed, you'll need to install them to compile required packages like libewf-python and pytsk3.
-
-```bash
-*If you encounter this error while installing dependencies:
-
-"Microsoft Visual C++ 14.0 or greater is required"
-It means your C++ Build Tools are missing or outdated.
-Please follow the steps below to install the latest version of "C++ Build Tools".
-```
-
-Step 1: Download and Install Microsoft C++ Build Tools - https://visualstudio.microsoft.com/visual-cpp-build-tools/
-During the installation, make sure to select the following workloads:
-  - Desktop development with C++
-  - C++ build tools
-  
-### Core Dependencies
-pytsk3==20250729<br> 
-libewf-python==20240506<br> 
-libbde-python==20240502<br>
-dfvfs
-
+V2 replaces the previous application in `vscexplorer.py`. Existing launch commands
+continue to work; there is no separate v2 executable.
 
 ```bash
 git clone https://github.com/sujayadkesar/vscexplorer.git
 cd vscexplorer
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 python vscexplorer.py
 ```
 
-## V2 preview
+The requirements install PySide6 and the native libraries for filesystem browsing,
+E01, BitLocker and VSS. Native libraries may require platform build tools, including
+Microsoft C++ Build Tools on Windows; availability depends on the Python/platform
+combination. Python 3.12 with PySide6 is tested for the demo and regression suite;
+native-image integration on that configuration remains unverified.
 
-The v2 application is `vscexplorer_v2.py`; the original entry point remains
-`vscexplorer.py`. To launch v2 and use its built-in demo case:
+For the built-in demo and tests without native image libraries:
 
 ```bash
-python -m pip install -r requirements-v2.txt
-python vscexplorer_v2.py
+python -m pip install "PySide6>=6.6,<7"
+python vscexplorer.py
 ```
 
 V2 adds persistent snapshot indexing, ADS browsing/export, hex search, version
-history, bookmarks and HTML/PDF case reports. Python 3.12 with PySide6 is tested
-for the demo and regression suite. PyQt5 is also supported by the application
-but was not validated in this audit.
+history, bookmarks and HTML/PDF case reports. PyQt5 remains a fallback if installed
+instead of PySide6, but was not validated in this audit.
 
-Real filesystem browsing additionally requires `pytsk3`. Optional native
-backends are `pyewf` (E01), `pyvshadow` (VSS), `pybde` (BitLocker), `pyvhdi`
-(VHD/VHDX), and `pyvmdk` (VMDK). These import names are supplied by their
-respective libyal Python bindings; they are not installed by
-`requirements-v2.txt`. Windows creation-time preservation uses `pywin32`.
+Real filesystem browsing requires `pytsk3`. Native backends are `pyewf` (E01),
+`pyvshadow` (VSS), `pybde` (BitLocker), `pyvhdi` (VHD/VHDX), and `pyvmdk` (VMDK).
+The libyal Python bindings supply these import names. The optional VHD/VMDK
+bindings are not included in `requirements.txt`. Windows creation-time
+preservation additionally uses `pywin32`.
 Use **Help > Forensic Dependency Status** to inspect availability.
 
-This is a preview for review and testing, pending known-answer real-image
-validation. Native container, VSS, BitLocker and physical-drive integration
-have not been verified by the synthetic tests. See [the audit](AUDIT_V2.md)
-for coverage and remaining validation.
+Known-answer real-image validation is still pending. Native container, VSS,
+BitLocker and physical-drive integration have not been verified by the synthetic
+tests. See [the audit](AUDIT_V2.md) for coverage and remaining validation.
 
 ```bash
 python -m unittest -v test_vscexplorer_v2
-python vscexplorer_v2.py --self-test
+python vscexplorer.py --self-test
 ```
 
 ## Acknowledgments & Credits

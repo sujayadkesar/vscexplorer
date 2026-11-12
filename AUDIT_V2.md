@@ -35,7 +35,7 @@ compilation and Ruff undefined-name/syntax checks passed**. The prior preview
 commit also passed both GitHub Actions runs. Native-image validation remains
 outstanding as described above.
 
-Audited and updated `vscexplorer_v2.py`. Validation used Windows, Python 3.12.10,
+Audited the v2 implementation, now installed as `vscexplorer.py`. Validation used Windows, Python 3.12.10,
 PySide6/Qt6, temporary synthetic raw images, the built-in demo case, and mocks
 for native-library failure paths. No user evidence or physical drives were opened.
 
@@ -239,10 +239,19 @@ have been eliminated. Native-image integration limitations remain as above.
 ## Repeat the tests
 
 ```powershell
-python vscexplorer_v2.py --self-test
+python vscexplorer.py --self-test
 python -m unittest -v test_vscexplorer_v2
-python -m py_compile vscexplorer_v2.py test_vscexplorer_v2.py
+python -m py_compile vscexplorer.py test_vscexplorer_v2.py
 ```
 
 The new test suite sets `QT_QPA_PLATFORM=offscreen` unless already configured,
 uses temporary output directories, and closes demo sessions after each test.
+
+## Replacement entry point
+
+V2 now replaces the previous implementation in `vscexplorer.py`. The separate
+`vscexplorer_v2.py` and v2 requirements file have been removed. Tests import the
+standard entry point, CI exercises it, and the main requirements now use PySide6
+and include the VSS binding rather than the unused dfvfs dependency. The 57
+regression tests, 18 self-tests, compilation and static checks pass after this
+change. Native-image validation remains outstanding.
