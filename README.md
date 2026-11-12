@@ -93,7 +93,7 @@ Use **Help > Forensic Dependency Status** to inspect availability.
 
 Known-answer real-image validation is still pending. Native container, VSS,
 BitLocker and physical-drive integration have not been verified by the synthetic
-tests. See [the audit](AUDIT_V2.md) for coverage and remaining validation.
+tests.
 
 ```bash
 python -m unittest -v test_vscexplorer_v2
